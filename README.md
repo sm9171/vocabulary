@@ -1,1 +1,1 @@
-# vocabulary-server
+# vocabulary
