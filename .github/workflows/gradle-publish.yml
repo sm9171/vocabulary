@@ -22,7 +22,7 @@ jobs:
 
       - name: Build
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Needed to get PR information, if any
         run: ./gradlew build
       - uses: actions/upload-artifact@v2
         with:
@@ -32,7 +32,7 @@ jobs:
         with:
           registry: ghcr.io/sm9171
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUBTOKEN }}
+          password: ${{ secrets.TOKEN }}
       - name: Get branch name
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr /# -)" >> $GITHUB_ENV
       - name: Build container image
