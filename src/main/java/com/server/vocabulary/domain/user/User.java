@@ -1,5 +1,7 @@
 package com.server.vocabulary.domain.user;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,29 +13,56 @@ public class User {
     @Id
     private Long id;
 
-    private String email;
-    private String password;
-    private String nickname;
+    @Embedded
+    private Email email;
+    @Embedded
+    private Password password;
+    @Embedded
+    private UserName userName;
 
-    static User of(String email, String password, String nickname) {
-        return new User(email, password, nickname);
+    public Password getPassword() {
+        return password;
     }
 
-    private User(String email, String password, String nickname) {
+    static User of(Email email, Password password, UserName userName) {
+        return new User(email, password, userName);
+    }
+
+    private User(Email email, Password password, UserName userName) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.userName = userName;
     }
 
     protected User() {
     }
 
-    public String getEmail() {
+    public Long getId() {
+        return id;
+    }
+
+    public Email getEmail() {
         return email;
     }
 
-    public String getNickname() {
-        return nickname;
+    public UserName getUserName() {
+        return userName;
+    }
+
+    boolean matchesPassword(String rawPassword, PasswordEncoder passwordEncoder) {
+        return password.matchesPassword(rawPassword, passwordEncoder);
+    }
+
+    void changeEmail(Email email) {
+        this.email = email;
+    }
+
+    void changePassword(Password password) {
+        this.password = password;
+    }
+
+    void changeName(UserName userName) {
+        this.userName = userName;
     }
 
     @Override
